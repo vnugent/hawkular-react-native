@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { H1 } from 'native-base';
+import { Text } from 'react-native';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
 
@@ -7,6 +7,7 @@ import _ from 'lodash';
 import store from './model/Store';
 import { pedometerSensor } from './sensors/PedometerSensor';
 
+const HAWKULAR_THROTTLE_RATE = 1000;
 
 const HawkularPedometer = observer( class HawkularPedometer extends Component {
 
@@ -17,23 +18,46 @@ const HawkularPedometer = observer( class HawkularPedometer extends Component {
             speed: 0,
             lastSpeed: 0,
         };
-        this.pedometer = pedometerSensor(_.throttle(this.getSpeed, 300), 5, 100);
-        //this.pedometer = new AccelerometerToHawkular(store.getHawkularClient());
+        this.pedometer = pedometerSensor(
+                            _.throttle(this.getSpeed, 300), 
+                            5, 100);
         this.autoReset();
     }
 
     getSpeed = (v) => {
+        if (!store.powerState.get()) {
+            return;
+        }
         this.setState({
             speed: Math.round(v)
-        })
+        });
+
+        this.sendToHawkular(v);
+    }
+
+
+    sendToHawkular = _.throttle((speed) => {
+        store.getHawkularClient().sendGauge('speed', 
+                                    Math.round(speed),
+                                    this.sendOkHandler,
+                                    this.sendErrorHandler
+                                        );       
+    }, HAWKULAR_THROTTLE_RATE)
+
+
+    sendOkHandler = (json) => {
+        console.log(json);
+    }
+
+    sendErrorHandler = (error) => {
+        console.log(error);
     }
 
     render() {
-        if (!store.powerState.get()) {
-            return null;
-        }
+        const speed = store.powerState.get() ? this.state.speed.toString() : "Sensor is off";
+
         return (
-            <H1>Speed: {this.state.speed.toString()}</H1>
+            <Text style={{fontSize: 82}}>{speed}</Text>
             );
     }
 

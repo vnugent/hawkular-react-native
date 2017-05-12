@@ -25,11 +25,8 @@ const App = observer(class App extends Component {
             <Container>
                 <Header>
                     <Left>
-                        <Button large light outline bordered transparent><Text>Hawkular React Native</Text></Button>
-                    </Left>
-                    <Body>
                         <BuildInfoPopup/>
-                    </Body>
+                    </Left>
                     <Right>
                         <Text>Off&nbsp;</Text>
                         <Switch onValueChange={this.onPowerToggle} value={currentState}/>
@@ -45,6 +42,7 @@ const App = observer(class App extends Component {
 
 
 });
+
 
 export default App;
 

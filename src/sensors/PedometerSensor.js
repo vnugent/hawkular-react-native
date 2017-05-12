@@ -12,7 +12,7 @@ const pedometerSensor =(fn, minSentivity) => {
     var lastSpeed=0;
 
     accelerationObservable
-        .map(({ x, y, z }) => Math.abs(x + y + z - lastSpeed))
+        .map(({ x, y, z }) => Math.abs(x + y + z))
         .filter(speed => speed >= minSentivity)
         .subscribe(speed => {
             lastSpeed = speed;

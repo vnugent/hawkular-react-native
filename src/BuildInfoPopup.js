@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Icon, Text, H3 } from 'native-base';
 import { observer } from 'mobx-react';
-import { Modal, View } from 'react-native';
+import { Modal, View, Image } from 'react-native';
 
 import store from './model/Store';
 
@@ -33,7 +33,7 @@ const BuildInfoPopup = observer( class BuildInfoPopup extends Component {
         return (
             <View>
                 <Button onPress={this.onInfoPress}>
-                    <Icon name='information-circle' />
+                    <Image source={require("./hawkular_icon_48x48.png")} />
                 </Button>
                 <Modal animationType={"fade"} 
                         transparent={true} 
