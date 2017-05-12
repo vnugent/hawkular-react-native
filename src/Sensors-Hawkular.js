@@ -25,7 +25,7 @@ const accelerometer =(fn, threshold) => {
 }
 
 
-class HawkularAccelerometer {
+class AccelerometerToHawkular {
 
     constructor(hawkular, options={pushInterval: 5000}) {
         this.pushInterval = options.pushInterval;
@@ -57,5 +57,5 @@ class HawkularAccelerometer {
 
 module.exports = {
   accelerometer: accelerometer,
-  HawkularAccelerometer: HawkularAccelerometer
+  AccelerometerToHawkular: AccelerometerToHawkular
 };

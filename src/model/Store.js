@@ -1,30 +1,33 @@
 import {observable, action, useStrict, computed, toJS} from 'mobx';
 
-import Hawkular from './Hawkular'
-
+import Hawkular from '../hawkular/Hawkular'
+import BasicAuth from './BasicAuth';
 
 useStrict(true);
 
 class Store {
     constructor() {
-        this.on = observable.box(false);
+        this.powerState = observable.box(false);
         this.hawkular_status = observable({
             version: null,
             gitSHA1: null,
             request_completed: false,
         });
 
-        const basic_auth = {
+        this.basicAuth = new BasicAuth({
             username: 'jdoe',
             password: 'password'
-        }
-        this.hawkular = new Hawkular("https://livingontheedge.hawkular.org", basic_auth);
+        });
+        this.hawkular = new Hawkular("https://livingontheedge.hawkular.org", this.basicAuth);
     }
 
 
-    toggle = action((currentState) => {
-        this.on.set(currentState);
+    togglePower = action((currentState) => {
+        this.powerState.set(currentState);
     })
+
+
+    getHawkularClient = () => (this.hawkular)
 
 
     getHawkularStatusAction = () => {
@@ -45,9 +48,6 @@ class Store {
     })
 
 
-    powerState  = computed(() => {
-        return toJS(this.on.get());
-    })
 
 
 }

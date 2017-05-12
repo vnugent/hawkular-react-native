@@ -4,21 +4,18 @@ import { observer } from 'mobx-react';
 
 import store from './model/Store';
 import BuildInfoPopup from './BuildInfoPopup';
+import HawkularPedometer from './HawkularPedometer';
+
 
 const App = observer(class App extends Component {
     constructor(props) {
         super(props);
-        this.onPowerChange = this.onPowerChange.bind(this);
+        this.onPowerToggle = this.onPowerToggle.bind(this);
     }
 
 
-    onPowerChange(value) {
-        store.toggle(value);
-    }
-
-    
-    onInfoPress() {
-        store.getHawkularStatusAction();
+    onPowerToggle(value) {
+        store.togglePower(value);
     }
 
 
@@ -35,11 +32,12 @@ const App = observer(class App extends Component {
                     </Body>
                     <Right>
                         <Text>Off&nbsp;</Text>
-                        <Switch onValueChange={this.onPowerChange} value={currentState}/>
+                        <Switch onValueChange={this.onPowerToggle} value={currentState}/>
                         <Text>&nbsp;On</Text>
                     </Right>
                 </Header>
                 <Content>
+                    <HawkularPedometer />
                 </Content>
             </Container>
         );
